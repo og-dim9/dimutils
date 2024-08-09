@@ -1,22 +1,25 @@
-FROM busybox:musl as builder
+FROM docker.io/dim9/static:bash AS bash
+FROM docker.io/dim9/static:jq AS jq
+FROM docker.io/dim9/static:kcat AS kcat
+FROM docker.io/dim9/static:make AS make
+FROM docker.io/dim9/static:node AS node
+FROM docker.io/dim9/static:opentofu AS opentofu
+FROM docker.io/dim9/static:quickjs AS quickjs
+FROM docker.io/dim9/static:task AS task
+FROM docker.io/dim9/static:terraform AS terraform
+FROM docker.io/dim9/static:yq AS yq
+FROM docker.io/dim9/static:busybox AS final
+COPY --from=bash /bin/bash /bin/
+COPY --from=jq /bin/jq /bin/
+COPY --from=kcat /bin/kcat /bin/
+COPY --from=make /bin/make /bin/
+COPY --from=node /bin/node /bin/
+COPY --from=opentofu /bin/opentofu /bin/
+COPY --from=quickjs /bin/quickjs /bin/
+COPY --from=task /bin/task /bin/
+COPY --from=terraform /bin/terraform /bin/
+COPY --from=yq /bin/yq /bin/
 
-ARG TASK_URL=https://github.com/go-task/task/releases/download
-ARG TASK_VERSION=v3.37.2
-ARG TASK_ARCH=linux_amd64
+USER dimutls
 
-WORKDIR /install/task
-RUN wget --no-check-certificate \
-    "${TASK_URL}/${TASK_VERSION}/task_${TASK_ARCH}.tar.gz" && \
-    tar -xzf task_${TASK_ARCH}.tar.gz  task -C /bin && \
-    rm -rfv task_${TASK_ARCH}.tar.gz
-
-# FROM debian:stable-slim as bash
-# RUN apt update && apt intall -y bash-static
-# RUN which bash-static
-
-FROM scratch as final
-COPY --from=builder /bin/busybox /bin/busybox
-COPY --from=builder /bin/task /bin/task
-# COPY --from=bash /usr/bin/bash-static /bin/bash
-RUN ["/bin/busybox", "--install", "/bin"]
-#COPY --from=builder /app/bin/task /usr/local/bin/task
+CMD [ "/bin/bash" ]
