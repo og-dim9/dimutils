@@ -1,6 +1,6 @@
 # Variables
 IMAGE_NAME := dimutils
-IMAGE_TAG := 0.2
+IMAGE_TAG := 0.3.0
 REGISTRY := docker.io/dim9
 
 # Build the container
