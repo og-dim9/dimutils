@@ -1,0 +1,4 @@
+- name: sleep
+  output: 0
+  command: cd sleep && UNEXPECT_PRINTEXITCODEONLY=1 ../../unexpect
+
