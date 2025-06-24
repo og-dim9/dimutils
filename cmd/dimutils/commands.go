@@ -5,10 +5,12 @@ import (
 	"os"
 
 	"github.com/og-dim9/dimutils/pkg/cbxxml2regex"
+	"github.com/og-dim9/dimutils/pkg/consume"
 	"github.com/og-dim9/dimutils/pkg/ebcdic"
 	"github.com/og-dim9/dimutils/pkg/eventdiff"
 	"github.com/og-dim9/dimutils/pkg/gitaskop"
 	"github.com/og-dim9/dimutils/pkg/mkgchat"
+	"github.com/og-dim9/dimutils/pkg/produce"
 	"github.com/og-dim9/dimutils/pkg/regex2json"
 	"github.com/og-dim9/dimutils/pkg/serve"
 	"github.com/og-dim9/dimutils/pkg/tandum"
@@ -151,6 +153,34 @@ var togchatCmd = &cobra.Command{
 	},
 }
 
+// consumeCmd represents the consume command
+var consumeCmd = &cobra.Command{
+	Use:                "consume",
+	Short:              "Consume messages from Kafka topics",
+	Long:               `Consume messages from Kafka topics and output to stdout with various formatting options.`,
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := consume.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
+
+// produceCmd represents the produce command
+var produceCmd = &cobra.Command{
+	Use:                "produce",
+	Short:              "Produce messages to Kafka topics",
+	Long:               `Produce messages to Kafka topics from stdin or files with various formatting options.`,
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := produce.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
+
 // runIndividualTool shows a placeholder message for now
 func runIndividualTool(toolName string, args []string) {
 	cobra.CheckErr(fmt.Errorf("%s tool not yet integrated into multicall binary. Please use individual binary from src/%s/ or run 'make %s' to build it", toolName, toolName, toolName))
@@ -169,5 +199,7 @@ func init() {
 		tandumCmd,
 		mkgchatCmd,
 		togchatCmd,
+		consumeCmd,
+		produceCmd,
 	)
 }
