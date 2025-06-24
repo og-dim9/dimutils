@@ -15,6 +15,7 @@ import (
 	"github.com/og-dim9/dimutils/pkg/tandum"
 	"github.com/og-dim9/dimutils/pkg/togchat"
 	"github.com/og-dim9/dimutils/pkg/unexpect"
+	"github.com/og-dim9/dimutils/pkg/validate"
 	"github.com/spf13/cobra"
 )
 
@@ -152,6 +153,7 @@ var togchatCmd = &cobra.Command{
 	},
 }
 
+
 // schemaCmd represents the schema command
 var schemaCmd = &cobra.Command{
 	Use:                "schema",
@@ -160,6 +162,20 @@ var schemaCmd = &cobra.Command{
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := schema.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
+
+// validateCmd represents the validate command
+var validateCmd = &cobra.Command{
+	Use:                "validate",
+	Short:              "Data validation and schema checking",
+	Long:               `Validate JSON data against schemas, custom rules, and perform data quality checks.`,
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := validate.Run(args); err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
@@ -185,5 +201,6 @@ func init() {
 		mkgchatCmd,
 		togchatCmd,
 		schemaCmd,
+		validateCmd,
 	)
 }
