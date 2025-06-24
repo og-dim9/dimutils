@@ -18,9 +18,8 @@ endif
 GO := go
 LDFLAGS := -ldflags "-X main.Version=$(VERSION)"
 
-# Individual tool directories
-TOOLS := $(shell find src -maxdepth 1 -type d -name '*' | grep -v '^src$$' | sort)
-TOOL_NAMES := $(notdir $(TOOLS))
+# Individual tool packages (now integrated into multicall binary)
+TOOL_NAMES := cbxxml2regex ebcdic eventdiff gitaskop mkgchat regex2json serve tandum togchat unexpect
 
 # Build directories
 BUILD_DIR := build
@@ -57,13 +56,8 @@ windows: dl $(BIN_DIR)
 	@echo "Building multicall binary for Windows..."
 	@GOOS=windows GOARCH=amd64 $(GO) build $(LDFLAGS) -o $(BIN_DIR)/$(APP_NAME).exe ./cmd/$(APP_NAME)
 
-# Build individual tool binaries
-individual: $(TOOL_NAMES)
-
-$(TOOL_NAMES): dl $(BIN_DIR)
-	@echo "Building individual binary: $@"
-	@cd src/$@ && GOOS=$(detected_OS) $(GO) build $(LDFLAGS) -o ../../$(BIN_DIR)/$@$(EXT) .
-	@echo "Built individual binary: $(BIN_DIR)/$@$(EXT)"
+# Create symlinks for individual tools (all tools are now in multicall binary)
+individual: symlinks
 
 # Create symlinks for multicall (Unix only)
 symlinks: multicall
@@ -82,14 +76,7 @@ test:
 	@$(GO) test ./...
 
 test-tools:
-	@echo "Running tool-specific tests..."
-	@for tool in $(TOOL_NAMES); do \
-		if [ -f "src/$$tool/Makefile" ]; then \
-			echo "Testing $$tool..."; \
-			cd src/$$tool && make test; \
-			cd ../..; \
-		fi; \
-	done
+	@echo "All tools are now integrated into multicall binary. Use 'make test' instead."
 
 # Docker targets
 docker: linux
@@ -123,12 +110,6 @@ run-windows: windows
 clean:
 	@echo "Cleaning build artifacts..."
 	@rm -rf $(BUILD_DIR)
-	@for tool in $(TOOL_NAMES); do \
-		if [ -f "src/$$tool/Makefile" ]; then \
-			cd src/$$tool && make clean; \
-			cd ../..; \
-		fi; \
-	done
 
 # Development targets
 watch:
