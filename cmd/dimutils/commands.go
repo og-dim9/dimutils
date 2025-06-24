@@ -154,6 +154,7 @@ var togchatCmd = &cobra.Command{
 	},
 }
 
+
 // kafkaCmd represents the kafka command
 var kafkaCmd = &cobra.Command{
 	Use:                "kafka",
