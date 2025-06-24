@@ -10,6 +10,7 @@ import (
 	"github.com/og-dim9/dimutils/pkg/gitaskop"
 	"github.com/og-dim9/dimutils/pkg/mkgchat"
 	"github.com/og-dim9/dimutils/pkg/regex2json"
+	"github.com/og-dim9/dimutils/pkg/schema"
 	"github.com/og-dim9/dimutils/pkg/serve"
 	"github.com/og-dim9/dimutils/pkg/tandum"
 	"github.com/og-dim9/dimutils/pkg/togchat"
@@ -152,6 +153,21 @@ var togchatCmd = &cobra.Command{
 	},
 }
 
+
+// schemaCmd represents the schema command
+var schemaCmd = &cobra.Command{
+	Use:                "schema",
+	Short:              "Schema management and validation",
+	Long:               `Generate, validate, and manage JSON schemas for data processing.`,
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := schema.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
+
 // validateCmd represents the validate command
 var validateCmd = &cobra.Command{
 	Use:                "validate",
@@ -184,6 +200,7 @@ func init() {
 		tandumCmd,
 		mkgchatCmd,
 		togchatCmd,
+		schemaCmd,
 		validateCmd,
 	)
 }
