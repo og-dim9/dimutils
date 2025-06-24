@@ -5,11 +5,12 @@ import (
 	"os"
 
 	"github.com/og-dim9/dimutils/pkg/cbxxml2regex"
+	"github.com/og-dim9/dimutils/pkg/config"
+	"github.com/og-dim9/dimutils/pkg/mkgchat"
+	"github.com/og-dim9/dimutils/pkg/regex2json"
 	"github.com/og-dim9/dimutils/pkg/ebcdic"
 	"github.com/og-dim9/dimutils/pkg/eventdiff"
 	"github.com/og-dim9/dimutils/pkg/gitaskop"
-
-
 	"github.com/og-dim9/dimutils/pkg/kafka"
 	"github.com/og-dim9/dimutils/pkg/mkgchat"
 	"github.com/og-dim9/dimutils/pkg/regex2json"
@@ -18,7 +19,6 @@ import (
 	"github.com/og-dim9/dimutils/pkg/tandum"
 	"github.com/og-dim9/dimutils/pkg/togchat"
 	"github.com/og-dim9/dimutils/pkg/unexpect"
-
 	"github.com/og-dim9/dimutils/pkg/validate"
 	"github.com/spf13/cobra"
 )
@@ -157,6 +157,19 @@ var togchatCmd = &cobra.Command{
 	},
 }
 
+// configCmd represents the config command
+var configCmd = &cobra.Command{
+	Use:                "config",
+	Short:              "Interactive configuration management",
+	Long:               `Create and manage configuration files, run command chains, and generate manifests.`,
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := config.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
 
 // transformCmd represents the transform command
 var transformCmd = &cobra.Command{
@@ -245,6 +258,7 @@ func init() {
 		tandumCmd,
 		mkgchatCmd,
 		togchatCmd,
+		configCmd,
 		transformCmd,
 		testharnessCmd,
 		kafkaCmd,
