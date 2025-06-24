@@ -5,9 +5,8 @@ import (
 	"os"
 
 	"github.com/og-dim9/dimutils/pkg/cbxxml2regex"
+	"github.com/og-dim9/dimutils/pkg/datagen"
 	"github.com/og-dim9/dimutils/pkg/config"
-	"github.com/og-dim9/dimutils/pkg/mkgchat"
-	"github.com/og-dim9/dimutils/pkg/regex2json"
 	"github.com/og-dim9/dimutils/pkg/ebcdic"
 	"github.com/og-dim9/dimutils/pkg/eventdiff"
 	"github.com/og-dim9/dimutils/pkg/gitaskop"
@@ -157,6 +156,19 @@ var togchatCmd = &cobra.Command{
 	},
 }
 
+// datagenCmd represents the datagen command
+var datagenCmd = &cobra.Command{
+	Use:   "datagen",
+	Short: "Test data generation utility",
+	Long:  `Generate realistic test data and shadow traffic for load testing.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := datagen.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
+
 // configCmd represents the config command
 var configCmd = &cobra.Command{
 	Use:                "config",
@@ -248,6 +260,7 @@ func runIndividualTool(toolName string, args []string) {
 func init() {
 	// Add all tool commands to root
 	rootCmd.AddCommand(
+		datagenCmd,
 		gitaskopCmd,
 		eventdiffCmd,
 		unexpectCmd,
