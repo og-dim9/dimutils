@@ -8,6 +8,7 @@ import (
 	"github.com/og-dim9/dimutils/pkg/ebcdic"
 	"github.com/og-dim9/dimutils/pkg/eventdiff"
 	"github.com/og-dim9/dimutils/pkg/gitaskop"
+
 	"github.com/og-dim9/dimutils/pkg/kafka"
 	"github.com/og-dim9/dimutils/pkg/mkgchat"
 	"github.com/og-dim9/dimutils/pkg/regex2json"
@@ -154,6 +155,18 @@ var togchatCmd = &cobra.Command{
 	},
 }
 
+// transformCmd represents the transform command
+var transformCmd = &cobra.Command{
+	Use:   "transform",
+	Short: "Data transformation utility",
+	Long:  `Transform data between different formats and structures.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := transform.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
 
 // kafkaCmd represents the kafka command
 var kafkaCmd = &cobra.Command{
@@ -177,6 +190,20 @@ var schemaCmd = &cobra.Command{
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := schema.Run(args); err != nil {
+
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
+
+// testharnessCmd represents the testharness command
+var testharnessCmd = &cobra.Command{
+	Use:   "testharness",
+	Short: "Test execution framework",
+	Long:  `Comprehensive test harness for running and managing tests.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := testharness.Run(args); err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
@@ -191,7 +218,6 @@ var validateCmd = &cobra.Command{
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := validate.Run(args); err != nil {
-
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
@@ -216,6 +242,8 @@ func init() {
 		tandumCmd,
 		mkgchatCmd,
 		togchatCmd,
+		transformCmd,
+		testharnessCmd,
 		kafkaCmd,
 		schemaCmd,
 		validateCmd,
