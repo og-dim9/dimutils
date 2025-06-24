@@ -1,9 +1,0 @@
-- name: sleep 5 seconds
-  output: five
-  command: sleep 5 | echo five
-- name: sleep 7 seconds
-  output: seven
-  command: sleep 7 | echo seven
-- name: sleep 1 seconds
-  output: one
-  command: sleep 1 | echo one
