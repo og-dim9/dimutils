@@ -12,6 +12,7 @@ import (
 	"github.com/og-dim9/dimutils/pkg/regex2json"
 	"github.com/og-dim9/dimutils/pkg/serve"
 	"github.com/og-dim9/dimutils/pkg/tandum"
+	"github.com/og-dim9/dimutils/pkg/testharness"
 	"github.com/og-dim9/dimutils/pkg/togchat"
 	"github.com/og-dim9/dimutils/pkg/unexpect"
 	"github.com/spf13/cobra"
@@ -150,6 +151,18 @@ var togchatCmd = &cobra.Command{
 		}
 	},
 }
+// testharnessCmd represents the testharness command
+var testharnessCmd = &cobra.Command{
+	Use:   "testharness",
+	Short: "Test execution framework",
+	Long:  `Comprehensive test harness for running and managing tests.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := testharness.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
 
 // runIndividualTool shows a placeholder message for now
 func runIndividualTool(toolName string, args []string) {
@@ -169,5 +182,7 @@ func init() {
 		tandumCmd,
 		mkgchatCmd,
 		togchatCmd,
+		transformCmd,
+		testharnessCmd,
 	)
 }
