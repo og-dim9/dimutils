@@ -19,7 +19,7 @@ GO := go
 LDFLAGS := -ldflags "-X main.Version=$(VERSION)"
 
 # Individual tool packages (now integrated into multicall binary)
-TOOL_NAMES := cbxxml2regex consume ebcdic eventdiff gitaskop mkgchat produce regex2json serve tandum togchat unexpect
+TOOL_NAMES := cbxxml2regex ebcdic eventdiff gitaskop mkgchat regex2json serve tandum togchat unexpect
 
 # Build directories
 BUILD_DIR := build
