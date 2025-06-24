@@ -14,6 +14,7 @@ import (
 	"github.com/og-dim9/dimutils/pkg/tandum"
 	"github.com/og-dim9/dimutils/pkg/testharness"
 	"github.com/og-dim9/dimutils/pkg/togchat"
+	"github.com/og-dim9/dimutils/pkg/transform"
 	"github.com/og-dim9/dimutils/pkg/unexpect"
 	"github.com/spf13/cobra"
 )
@@ -151,6 +152,20 @@ var togchatCmd = &cobra.Command{
 		}
 	},
 }
+
+// transformCmd represents the transform command
+var transformCmd = &cobra.Command{
+	Use:   "transform",
+	Short: "Data transformation utility",
+	Long:  `Transform data between different formats and structures.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := transform.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
+
 // testharnessCmd represents the testharness command
 var testharnessCmd = &cobra.Command{
 	Use:   "testharness",
