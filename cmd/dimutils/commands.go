@@ -9,6 +9,7 @@ import (
 	"github.com/og-dim9/dimutils/pkg/ebcdic"
 	"github.com/og-dim9/dimutils/pkg/eventdiff"
 	"github.com/og-dim9/dimutils/pkg/gitaskop"
+	"github.com/og-dim9/dimutils/pkg/kafkaadmin"
 	"github.com/og-dim9/dimutils/pkg/mkgchat"
 	"github.com/og-dim9/dimutils/pkg/produce"
 	"github.com/og-dim9/dimutils/pkg/regex2json"
@@ -181,6 +182,20 @@ var produceCmd = &cobra.Command{
 	},
 }
 
+// kafkaAdminCmd represents the kafka admin command
+var kafkaAdminCmd = &cobra.Command{
+	Use:                "kafkaadmin",
+	Short:              "Kafka administration utilities",
+	Long:               `Manage Kafka topics, consumer groups, and configurations.`,
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := kafkaadmin.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
+
 // runIndividualTool shows a placeholder message for now
 func runIndividualTool(toolName string, args []string) {
 	cobra.CheckErr(fmt.Errorf("%s tool not yet integrated into multicall binary. Please use individual binary from src/%s/ or run 'make %s' to build it", toolName, toolName, toolName))
@@ -201,5 +216,6 @@ func init() {
 		togchatCmd,
 		consumeCmd,
 		produceCmd,
+		kafkaAdminCmd,
 	)
 }
