@@ -8,6 +8,7 @@ import (
 	"github.com/og-dim9/dimutils/pkg/ebcdic"
 	"github.com/og-dim9/dimutils/pkg/eventdiff"
 	"github.com/og-dim9/dimutils/pkg/gitaskop"
+	"github.com/og-dim9/dimutils/pkg/kafka"
 	"github.com/og-dim9/dimutils/pkg/mkgchat"
 	"github.com/og-dim9/dimutils/pkg/regex2json"
 	"github.com/og-dim9/dimutils/pkg/schema"
@@ -153,6 +154,19 @@ var togchatCmd = &cobra.Command{
 	},
 }
 
+// kafkaCmd represents the kafka command
+var kafkaCmd = &cobra.Command{
+	Use:                "kafka",
+	Short:              "Kafka utilities for consume, produce, and admin operations",
+	Long:               `Unified Kafka interface for consuming messages, producing messages, and administering topics and consumer groups.`,
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := kafka.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
 
 // schemaCmd represents the schema command
 var schemaCmd = &cobra.Command{
@@ -176,6 +190,7 @@ var validateCmd = &cobra.Command{
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := validate.Run(args); err != nil {
+
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
@@ -200,6 +215,7 @@ func init() {
 		tandumCmd,
 		mkgchatCmd,
 		togchatCmd,
+		kafkaCmd,
 		schemaCmd,
 		validateCmd,
 	)
