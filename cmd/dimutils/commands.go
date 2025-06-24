@@ -11,10 +11,12 @@ import (
 	"github.com/og-dim9/dimutils/pkg/kafka"
 	"github.com/og-dim9/dimutils/pkg/mkgchat"
 	"github.com/og-dim9/dimutils/pkg/regex2json"
+	"github.com/og-dim9/dimutils/pkg/schema"
 	"github.com/og-dim9/dimutils/pkg/serve"
 	"github.com/og-dim9/dimutils/pkg/tandum"
 	"github.com/og-dim9/dimutils/pkg/togchat"
 	"github.com/og-dim9/dimutils/pkg/unexpect"
+	"github.com/og-dim9/dimutils/pkg/validate"
 	"github.com/spf13/cobra"
 )
 
@@ -166,6 +168,35 @@ var kafkaCmd = &cobra.Command{
 	},
 }
 
+// schemaCmd represents the schema command
+var schemaCmd = &cobra.Command{
+	Use:                "schema",
+	Short:              "Schema management and validation",
+	Long:               `Generate, validate, and manage JSON schemas for data processing.`,
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := schema.Run(args); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
+
+// validateCmd represents the validate command
+var validateCmd = &cobra.Command{
+	Use:                "validate",
+	Short:              "Data validation and schema checking",
+	Long:               `Validate JSON data against schemas, custom rules, and perform data quality checks.`,
+	DisableFlagParsing: true,
+	Run: func(cmd *cobra.Command, args []string) {
+		if err := validate.Run(args); err != nil {
+
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+	},
+}
+
 // runIndividualTool shows a placeholder message for now
 func runIndividualTool(toolName string, args []string) {
 	cobra.CheckErr(fmt.Errorf("%s tool not yet integrated into multicall binary. Please use individual binary from src/%s/ or run 'make %s' to build it", toolName, toolName, toolName))
@@ -185,5 +216,7 @@ func init() {
 		mkgchatCmd,
 		togchatCmd,
 		kafkaCmd,
+		schemaCmd,
+		validateCmd,
 	)
 }
