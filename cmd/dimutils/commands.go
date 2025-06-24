@@ -5,13 +5,11 @@ import (
 	"os"
 
 	"github.com/og-dim9/dimutils/pkg/cbxxml2regex"
-	"github.com/og-dim9/dimutils/pkg/consume"
 	"github.com/og-dim9/dimutils/pkg/ebcdic"
 	"github.com/og-dim9/dimutils/pkg/eventdiff"
 	"github.com/og-dim9/dimutils/pkg/gitaskop"
-	"github.com/og-dim9/dimutils/pkg/kafkaadmin"
+	"github.com/og-dim9/dimutils/pkg/kafka"
 	"github.com/og-dim9/dimutils/pkg/mkgchat"
-	"github.com/og-dim9/dimutils/pkg/produce"
 	"github.com/og-dim9/dimutils/pkg/regex2json"
 	"github.com/og-dim9/dimutils/pkg/serve"
 	"github.com/og-dim9/dimutils/pkg/tandum"
@@ -154,42 +152,14 @@ var togchatCmd = &cobra.Command{
 	},
 }
 
-// consumeCmd represents the consume command
-var consumeCmd = &cobra.Command{
-	Use:                "consume",
-	Short:              "Consume messages from Kafka topics",
-	Long:               `Consume messages from Kafka topics and output to stdout with various formatting options.`,
+// kafkaCmd represents the kafka command
+var kafkaCmd = &cobra.Command{
+	Use:                "kafka",
+	Short:              "Kafka utilities for consume, produce, and admin operations",
+	Long:               `Unified Kafka interface for consuming messages, producing messages, and administering topics and consumer groups.`,
 	DisableFlagParsing: true,
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := consume.Run(args); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
-	},
-}
-
-// produceCmd represents the produce command
-var produceCmd = &cobra.Command{
-	Use:                "produce",
-	Short:              "Produce messages to Kafka topics",
-	Long:               `Produce messages to Kafka topics from stdin or files with various formatting options.`,
-	DisableFlagParsing: true,
-	Run: func(cmd *cobra.Command, args []string) {
-		if err := produce.Run(args); err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-			os.Exit(1)
-		}
-	},
-}
-
-// kafkaAdminCmd represents the kafka admin command
-var kafkaAdminCmd = &cobra.Command{
-	Use:                "kafkaadmin",
-	Short:              "Kafka administration utilities",
-	Long:               `Manage Kafka topics, consumer groups, and configurations.`,
-	DisableFlagParsing: true,
-	Run: func(cmd *cobra.Command, args []string) {
-		if err := kafkaadmin.Run(args); err != nil {
+		if err := kafka.Run(args); err != nil {
 			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 			os.Exit(1)
 		}
@@ -214,8 +184,6 @@ func init() {
 		tandumCmd,
 		mkgchatCmd,
 		togchatCmd,
-		consumeCmd,
-		produceCmd,
-		kafkaAdminCmd,
+		kafkaCmd,
 	)
 }
